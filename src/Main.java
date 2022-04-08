@@ -7,23 +7,23 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String fileName = "";
+        String fileName = "maze10_1.txt";   // input file name
 
-        char[][] gridHolder = parser(fileName);
+        char[][] gridHolder = parser(fileName); // parse the input file
     }
 
     public static char[][] parser(String fileName) {
 
         int rowNo = 0;
         try {
-            FileReader fr = new FileReader(fileName);
-            BufferedReader br = new BufferedReader(fr);
+            FileReader fr = new FileReader("input files/" + fileName);  // open the file
+            BufferedReader br = new BufferedReader(fr); // read the file
             String line = "";
-            int length = br.readLine().length();
+            int length = br.readLine().length();    // get the length of the first line
 
             char[][] grid = new char[length][length];
 
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {    // read the file line by line
                 char[] column = line.toCharArray();
                 grid[rowNo] = column;
                 rowNo++;
@@ -34,7 +34,7 @@ public class Main {
                 for (int j = 0; j < grid[i].length; j++) {
                     System.out.print(grid[i][j]);
                 }
-                System.out.println();
+                System.out.println(" ");
             }
             return grid;
 
