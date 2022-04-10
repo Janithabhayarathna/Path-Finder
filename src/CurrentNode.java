@@ -2,7 +2,7 @@ public class CurrentNode {
 
     private int rowNumber;            // row number of the node
     private int columnNumber;         // column number of the node
-    private CurrentNode previous;    // node object to store its parent node
+    private CurrentNode previousNode;    // node object to store its parent node
     private String move;
 
     public CurrentNode(int rowNumber, int columnNumber) {
@@ -18,12 +18,12 @@ public class CurrentNode {
         return columnNumber;
     }
 
-    public CurrentNode getPrevious() {
-        return previous;
+    public CurrentNode getPreviousNode() {
+        return previousNode;
     }
 
-    public void setPrevious(CurrentNode previous) {
-        this.previous = previous;
+    public void setPreviousNode(CurrentNode previousNode) {
+        this.previousNode = previousNode;
     }
 
     public String getMove() {

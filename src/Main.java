@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
+
+/**
+ * Janith Chanaka Abhayarathna.
+ * Student ID: 20200571 / w1830253
+ * Algorithms Coursework
+ */
 
 public class Main {
 
@@ -13,14 +20,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String fileName = "maze10_1.txt";   // input file name
+        System.out.println(" ");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(">> Enter the file name: ");
+        String fileName = scanner.nextLine().toLowerCase();    // get the file name
 
+        System.out.println(" ");
         gridHolder = parser(fileName); // parse the input file
+        System.out.println(" ");
 
         startingTime = System.currentTimeMillis();
-        startingPosition(gridHolder);
 
-        shortestPath(gridHolder);
+        startingPosition(gridHolder);   // find the starting position
+
+        shortestPath(gridHolder);   // find the shortest path
 
     }
 
@@ -32,15 +45,15 @@ public class Main {
     public static char[][] parser(String fileName) {
 
         int rowNo = 0;
+        String line;
         try {
             FileReader fr = new FileReader("input files/" + fileName);  // open the file
             BufferedReader br = new BufferedReader(fr); // read the file
             br.mark(1); // mark the current position
-            String line;
             int length = br.readLine().length();    // get the length of the first line
-            br.reset();
+            br.reset(); // reset the current position to the beginning of the file
 
-            char[][] grid = new char[length][length];
+            char[][] grid = new char[length][length];   // create a 2D array to store the grid
 
             while ((line = br.readLine()) != null) {    // read the file line by line
                 char[] column = line.toCharArray();
@@ -48,10 +61,11 @@ public class Main {
                 rowNo++;
             }
 
+            System.out.println("Grid_________________________");
             // displaying the grid
-            for (int i = 0; i < grid.length; i++) {
-                for (int j = 0; j < grid[i].length; j++) {
-                    System.out.print(grid[i][j]);
+            for (char[] chars : grid) {
+                for (char aChar : chars) {
+                    System.out.print(aChar);
                 }
                 System.out.println(" ");
             }
@@ -108,12 +122,13 @@ public class Main {
             }
             findNeighbours(coordinate, -1, 0, "left");
             findNeighbours(coordinate, 1, 0, "right");
-            findNeighbours(coordinate, 0, 1, "bottom");
+            findNeighbours(coordinate, 0, 1, "down");
             findNeighbours(coordinate, 0, -1, "up");
         }
 
         if (found) {
-            System.out.println("Shortest path found");
+            System.out.println("Shortest path found____________________");
+            System.out.println(" ");
             displayPath(coordinate);
         } else {
             System.out.println("No Path Found");
@@ -143,7 +158,7 @@ public class Main {
 
             if (gridHolder[row][column] == 'F') {
                 CurrentNode neighbourNode = new CurrentNode(row, column);
-                neighbourNode.setPrevious(coordinate);
+                neighbourNode.setPreviousNode(coordinate);
                 neighbourNode.setMove(direction);
 
                 nodesQueue.add(0, neighbourNode);
@@ -156,7 +171,7 @@ public class Main {
 
             if ((nextRow < 0 || nextColumn < 0) || (nextRow >= gridHolder.length || nextColumn >= gridHolder.length) || (gridHolder[nextRow][nextColumn] == '0')) {
                 CurrentNode neighbourItem = new CurrentNode(row, column);
-                neighbourItem.setPrevious(coordinate);
+                neighbourItem.setPreviousNode(coordinate);
                 neighbourItem.setMove(direction);
 
                 nodesQueue.add(neighbourItem);
@@ -176,22 +191,21 @@ public class Main {
         long timeTaken = endTime - startingTime;
 
         ArrayList<String> path = new ArrayList<>();
-        int c = 0;
 
-        while (coordinate.getPrevious() != null) {
-            c++;
+        while (coordinate.getPreviousNode() != null) {
             String step = "Move " + coordinate.getMove() + " to " + "(" + (coordinate.getColumnNumber() + 1) + ", " + (coordinate.getRowNumber() + 1) + ")";
             path.add(step);
-            coordinate = coordinate.getPrevious();
+            coordinate = coordinate.getPreviousNode();
         }
         path.add("Start at " + "(" + (coordinate.getColumnNumber() + 1) + ", " + (coordinate.getRowNumber() + 1) + ")");
 
         Collections.reverse(path);
-        path.add("Done.");
+        path.add("Done!");
 
         for (int i = 0; i < path.size(); i++) {
             System.out.println(i+1 + ". " + path.get(i));
         }
         System.out.println(" ");
+        System.out.println("Time taken to find the path: " + timeTaken + "ms");
     }
 }
