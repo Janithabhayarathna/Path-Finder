@@ -11,14 +11,17 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static CurrentNode coordinate;
-    private static boolean[][] visitedNodes;
-    private static final ArrayList<CurrentNode> nodesQueue = new ArrayList<>();
-    static long startingTime;
-    static long endTime;
+    private CurrentNode coordinate;
+    private boolean[][] visitedNodes;
+    private final ArrayList<CurrentNode> nodesQueue = new ArrayList<>();
     static char[][] gridHolder;
 
     public static void main(String[] args) {
+
+        Main main = new Main();
+
+        long startingTime;
+        long endTime;
 
         System.out.println(" ");
         Scanner scanner = new Scanner(System.in);
@@ -26,15 +29,17 @@ public class Main {
         String fileName = scanner.nextLine().toLowerCase();    // get the file name
 
         System.out.println(" ");
-        gridHolder = parser(fileName); // parse the input file
+        gridHolder = main.parser(fileName); // parse the input file
         System.out.println(" ");
 
         startingTime = System.currentTimeMillis();
+        main.startingPosition(gridHolder);   // find the starting position
 
-        startingPosition(gridHolder);   // find the starting position
+        main.shortestPath(gridHolder);   // find the shortest path
+        endTime = System.currentTimeMillis();
 
-        shortestPath(gridHolder);   // find the shortest path
-
+        Double timeTaken = (endTime - startingTime) / 1000.0;
+        System.out.println("Time taken to find the path: " + timeTaken + " s");
     }
 
     /**
@@ -42,7 +47,7 @@ public class Main {
      * @param fileName
      * @return
      */
-    public static char[][] parser(String fileName) {
+    public char[][] parser(String fileName) {
 
         int rowNo = 0;
         String line;
@@ -86,7 +91,7 @@ public class Main {
      * @param grid
      */
     // finding the starting position
-    public static void startingPosition(char[][] grid) {
+    public void startingPosition(char[][] grid) {
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
@@ -102,7 +107,7 @@ public class Main {
      * @param grid
      */
     // Find the shortest path from the starting position to the ending position
-    public static void shortestPath(char[][] grid) {
+    public void shortestPath(char[][] grid) {
 
         visitedNodes = new boolean[grid.length][grid.length];
         nodesQueue.add(coordinate);
@@ -116,7 +121,6 @@ public class Main {
 
             // Finding the end position
             if (grid[visitedRowNumber][visitedColumnNumber] == 'F') {
-                endTime = System.currentTimeMillis();
                 found = true;
                 break;
             }
@@ -143,7 +147,7 @@ public class Main {
      * @param direction
      */
     // Find the neighbours of the current node
-    public static void findNeighbours(CurrentNode coordinate, int x, int y, String direction) {
+    public void findNeighbours(CurrentNode coordinate, int x, int y, String direction) {
 
         int row = coordinate.getRowNumber();
         int column = coordinate.getColumnNumber();
@@ -157,6 +161,7 @@ public class Main {
             }
 
             if (gridHolder[row][column] == 'F') {
+
                 CurrentNode neighbourNode = new CurrentNode(row, column);
                 neighbourNode.setPreviousNode(coordinate);
                 neighbourNode.setMove(direction);
@@ -186,9 +191,7 @@ public class Main {
      * @param coordinate
      */
     // Display the shortest path
-    public static void displayPath(CurrentNode coordinate) {
-
-        long timeTaken = endTime - startingTime;
+    public void displayPath(CurrentNode coordinate) {
 
         ArrayList<String> path = new ArrayList<>();
 
@@ -206,6 +209,6 @@ public class Main {
             System.out.println(i+1 + ". " + path.get(i));
         }
         System.out.println(" ");
-        System.out.println("Time taken to find the path: " + timeTaken + "ms");
+
     }
 }
